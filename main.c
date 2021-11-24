@@ -1,10 +1,17 @@
 #include <stdio.h>
 #include <malloc.h>
 
+char* allocation_error() {
+    printf("allocation error occurred");
+    return NULL;
+}
+
 char* read_line(int* len) { /* чтобы мы вне функции знали, какая длина у строки */
     int total_size = 1; /* will double size of array if *len >= size - 1(because of '/0' symbol)*/
     char* str = (char*)(malloc(sizeof(char))); /* FREE FREE FREE memory*/
-    /*if(str == NULL) ... */
+    if(str == NULL) {
+        return allocation_error();
+    }
     printf("> ");
     char c = (char)getchar();
     while(c != '\n') { /* we don't need '\n' symbol itself */
@@ -12,6 +19,9 @@ char* read_line(int* len) { /* чтобы мы вне функции знали,
         if(*len == total_size) {
             total_size *= 2;
             str = (char *) realloc(str, total_size * sizeof(char)); /* FREE FREE FREE memory*/
+            if(str == NULL) {
+                return allocation_error();
+            }
         }
         c = (char)getchar();
     }
@@ -29,6 +39,11 @@ void run_loop() {
     do {
         int len = 0;
         line = read_line(&len);
+
+        if(line == NULL) {
+            return;
+        }
+
         printf("%s", line);
         /*args = (split_line(line));
         status = (execute(args))*/

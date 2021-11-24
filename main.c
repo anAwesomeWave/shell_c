@@ -1,6 +1,9 @@
-#include <stdlib.h>
+#include <stdio.h>
 
-int main() {
-    printf("hello world!");
+int main(int argc, char** argv) {
+    printf("Have %d arguments\n", argc);
+    for(int i = 0; i < argc; i ++) {
+        printf("%s\n", *(argv + i));
+    }
     return 0;
 }

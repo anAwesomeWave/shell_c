@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include <malloc.h>
 
 char* allocation_error() {
@@ -29,6 +30,30 @@ char* read_line(int* len) { /* чтобы мы вне функции знали,
     return str; /* FREE FREE FREE memory*/
 }
 
+char** split_line(char* line) {
+    /*will use strtok -> no need in length of line */
+    /* для strtok нужны разделители, не содержащиеся в исходной строке*/
+    char delim[] = " ";
+    char** args = (char **) malloc(sizeof(char*)); /*one line */
+    if(!args)
+        return (char **) allocation_error();
+    int argcnt = 0; /* number of lines in args */
+    int sz = 1;
+    char* newArg = strtok(line, " \t\r\n\v\f");
+    while(newArg != NULL) {
+        //args[argcnt] = (char*) malloc(sizeof(char) * strlen(newArg)); // allocate the necessary amount of bytes for
+        // every char of new command
+        args[argcnt ++] = newArg;
+        printf("%s", args[argcnt-1]);
+        if(argcnt == sz) {
+            sz *= 2;
+            args = (char**) realloc(args, sizeof(char*) * sz);
+        }
+        newArg = strtok(NULL, " \t\r\n\v\f"); // subcall
+    }
+    args[argcnt] = NULL; // end of sequence
+    return args;
+}
 
 
 void run_loop() {
@@ -39,12 +64,16 @@ void run_loop() {
     do {
         int len = 0;
         line = read_line(&len);
-
         if(line == NULL) {
             return;
         }
+        args = split_line(line);
+        char* ptr = *args;
+        while(ptr != NULL) {
+            //printf("%s", ptr);
+            ptr ++;
+        }
 
-        printf("%s", line);
         /*args = (split_line(line));
         status = (execute(args))*/
         free(line);

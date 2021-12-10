@@ -20,8 +20,8 @@ char* allocation_error() {
 }
 
 void* read_line(int* len) { /* чтобы мы вне функции знали, какая длина у строки */
-    int total_size = 1; /* will double size of array if *len >= size - 1(because of '/0' symbol)*/
-    char* str = (char*)(malloc(sizeof(char))); /* FREE FREE FREE memory*/
+    int total_size = 1;
+    char* str = (char*)(malloc(sizeof(char)));
     if(str == NULL) {
         return (char*)allocation_error();
     }
@@ -31,7 +31,7 @@ void* read_line(int* len) { /* чтобы мы вне функции знали,
         str[(*len) ++] = c; /*БЛЯТЬ НЕ *(len) ++  А (*len) ++ это же приоритетность*/
         if(*len == total_size) {
             total_size *= 2;
-            str = (char *) realloc(str, total_size * sizeof(char)); /* FREE FREE FREE memory*/
+            str = (char *) realloc(str, total_size * sizeof(char));
             if(str == NULL) {
                 return (char*)allocation_error();
             }
@@ -39,7 +39,7 @@ void* read_line(int* len) { /* чтобы мы вне функции знали,
         c = (char)getchar();
     }
     str[*len] = '\0'; /* mb resize needed??*/
-    return str; /* FREE FREE FREE memory*/
+    return str;
 }
 
 char** split_line(char* line) {
@@ -95,7 +95,7 @@ void run_loop() {
         //free_mem(&line, &args);
         free(line);
         free(args); // memory leak may occur. check later with valgrind
-        // TODO: check for memory leaking.
+        // TODO: check for memory leaking. Can use valgrind.
     }while(0);
 }
 
@@ -104,3 +104,17 @@ int main(int argc, char** argv) { /* argv - array of strings.
     run_loop();
     return 0;
 }
+
+/*
+    fork() -> 0 to child
+    fork() -> pid of child to parent
+
+    the only way for new processes is to start is by an existing one duplicating itself.
+    exec() replaces the current running program with an entirely new one
+
+
+    First, an existing process forks itself into two separate ones. Then, the child uses exec() to replace itself with
+    a new program.
+    The parent process can continue doing other things, and it can even keep tabs on its children, using the system
+    call wait().
+ * */

@@ -15,7 +15,7 @@ int main() {
     if(process == 0) {
         printf("This is child process.\nMy PID is %d\n",  getpid()); // getpid return pid_t (int)
         printf("PID of parent - %d\n", getppid());
-        sleep(3);
+        sleep(2);
         printf("PPID of orphan - %d\n(init process - parent of all processes. "
                "first process to start when a computer boots up and runs until the system shuts down.)", getppid());
         // after parent's process has finished running

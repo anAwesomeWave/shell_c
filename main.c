@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-#include <malloc.h>
+#include <stdlib.h>
 
 
 /*void free_mem(char** a, char*** b) {
@@ -97,6 +97,7 @@ void run_loop() {
         free(args); // memory leak may occur. check later with valgrind
         // TODO: check for memory leaking. Can use valgrind.
     }while(0);
+
 }
 
 int main(int argc, char** argv) { /* argv - array of strings.
@@ -108,9 +109,15 @@ int main(int argc, char** argv) { /* argv - array of strings.
 /*
     fork() -> 0 to child
     fork() -> pid of child to parent
+    fork() -> negative means error
+    all code after fork () is executed twice.
 
     the only way for new processes is to start is by an existing one duplicating itself.
     exec() replaces the current running program with an entirely new one
+
+
+    fork() create new process
+    exec() set a program for process
 
 
     First, an existing process forks itself into two separate ones. Then, the child uses exec() to replace itself with
